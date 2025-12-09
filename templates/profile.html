@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль - Администрация Селятино</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Decorative Circles -->
+    <div class="decorative-circle circle-1"></div>
+    <div class="decorative-circle circle-2"></div>
+    <div class="decorative-circle circle-3"></div>
+    <div class="decorative-circle circle-4"></div>
+    <div class="decorative-circle circle-5"></div>
+
+    <div class="container">
+        <!-- Навигационная панель -->
+        <nav class="navbar">
+            <div class="navbar-title">Практикум</div>
+            <div>
+                <a href="/dashboard" class="navbar-button">Панель управления</a>
+                <a href="/logout" class="navbar-button">Выйти</a>
+            </div>
+        </nav>
+
+        <!-- Основной контент -->
+        <div class="main-content">
+            <div class="content-card">
+                <h2 class="content-title">Профиль пользователя</h2>
+                <div class="profile-info-container">
+                    <p class="profile-info"><strong>Имя пользователя:</strong> {{ username }}</p>
+                    <p class="profile-info"><strong>Дата регистрации:</strong> 01.01.2023</p>
+                </div>
+                <p class="content-description" style="margin-top: 20px;">
+                    Здесь отображается подробная информация о вашем профиле.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,531 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap');
+
+:root {
+    --primary-color: #4CAF50; /* A calm green */
+    --accent-color: #607D8B; /* Darker blue-grey for accent */
+    --background-light: #f4f6f9;
+    --background-dark: #e0e5ec;
+    --text-color-primary: #333;
+    --text-color-secondary: #555;
+    --card-background: #ffffff;
+    --border-color: #e0e0e0;
+    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.08);
+
+    /* New background variables */
+    --bg-gradient-start: #e0f2f7; /* Light blue */
+    --bg-gradient-end: #f5eef8;   /* Light purple */
+    --bg-animated-color1: #b2e0ff;
+    --bg-animated-color2: #d9f2ff;
+    --bg-animated-color3: #a0c4ff;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    background-size: 400% 400%;
+    animation: gradientAnimation 15s ease infinite;
+    color: var(--text-color-primary);
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    position: relative; /* For decorative circles */
+}
+
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.container {
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out forwards;
+    z-index: 1; /* Ensure container is above decorative circles */
+    position: relative; /* For z-index to work */
+}
+
+/* Анимация появления */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Decorative Circles (enhanced) */
+.decorative-circle {
+    position: fixed;
+    border-radius: 50%;
+    opacity: 0.15; /* Slightly more visible */
+    background: var(--primary-color);
+    animation: pulse 12s infinite ease-in-out alternate, float 15s ease-in-out infinite;
+    z-index: -1;
+    filter: blur(50px); /* Soften the circles */
+}
+
+.circle-1 {
+    width: 250px; /* Larger */
+    height: 250px;
+    top: 10%;
+    left: 10%;
+    background: var(--bg-animated-color1);
+    animation-delay: 0s;
+}
+
+.circle-2 {
+    width: 350px; /* Larger */
+    height: 350px;
+    bottom: 15%;
+    right: 10%;
+    background: var(--bg-animated-color2);
+    animation-delay: 3s;
+}
+
+.circle-3 {
+    width: 200px;
+    height: 200px;
+    top: 30%;
+    right: 20%;
+    background: var(--bg-animated-color3);
+    animation-delay: 6s;
+}
+
+.circle-4 { /* New circle */
+    width: 180px;
+    height: 180px;
+    bottom: 5%;
+    left: 25%;
+    background: var(--bg-animated-color1);
+    animation-delay: 9s;
+}
+
+.circle-5 { /* New circle */
+    width: 300px;
+    height: 300px;
+    top: 5%;
+    left: 40%;
+    background: var(--bg-animated-color3);
+    animation-delay: 12s;
+}
+
+
+@keyframes pulse {
+    0% { transform: scale(0.95); opacity: 0.15; }
+    100% { transform: scale(1.05); opacity: 0.25; } /* More prominent pulse */
+}
+
+@keyframes float {
+    0% { transform: translateY(0px) translateX(0px); }
+    25% { transform: translateY(10px) translateX(10px); }
+    50% { transform: translateY(0px) translateX(-10px); }
+    75% { transform: translateY(-10px) translateX(10px); }
+    100% { transform: translateY(0px) translateX(0px); }
+}
+
+
+/* Навигационная панель */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: var(--card-background);
+    border-radius: 12px;
+    box-shadow: var(--shadow-light);
+    border: 1px solid var(--border-color);
+    margin-bottom: 20px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.navbar-title {
+    font-size: 1.6em;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.navbar-button {
+    text-decoration: none;
+    color: var(--text-color-primary);
+    padding: 10px 18px;
+    margin-left: 10px;
+    border-radius: 8px;
+    background: var(--background-dark);
+    font-weight: 500;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    border: 1px solid var(--border-color);
+}
+
+.navbar-button:hover {
+    background: var(--primary-color);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-soon-button {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.navbar-soon-button:hover {
+    background-color: var(--accent-color);
+}
+
+/* Панель для кнопки "Soon" */
+.sub-navbar {
+    background: var(--card-background);
+    padding: 15px 25px;
+    border-radius: 12px;
+    margin-top: 15px;
+    box-shadow: var(--shadow-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--border-color);
+}
+
+.sub-navbar .navbar-button {
+    margin-left: 0;
+}
+
+/* Шапка (Index.html specific) */
+.header-section {
+    margin-top: 25px;
+    animation: fadeIn 0.7s ease-out 0.2s backwards;
+}
+
+.header-image {
+    height: 350px;
+    border-radius: 12px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-medium);
+}
+
+.header-overlay {
+    background: linear-gradient(45deg, rgba(76, 175, 80, 0.7), rgba(96, 125, 139, 0.4));
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+}
+
+.header-title {
+    font-size: 3.5em;
+    margin: 0;
+    font-weight: 700;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.header-subtitle {
+    font-size: 1.3em;
+    margin-top: 8px;
+    font-weight: 400;
+}
+
+/* Основной контент (General Card Style) */
+.main-content {
+    margin-top: 25px;
+    animation: fadeIn 0.9s ease-out 0.4s backwards;
+}
+
+/* Specific styles for auth page content */
+.auth-main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 100px);
+    margin-top: 0;
+}
+
+.auth-card {
+    max-width: 450px;
+    width: 100%;
+    padding: 40px;
+}
+
+.content-card {
+    background: var(--card-background);
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: var(--shadow-medium);
+    border: 1px solid var(--border-color);
+}
+
+.content-title {
+    font-size: 2.2em;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.content-description {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: var(--text-color-secondary);
+}
+
+/* Стили для формы аутентификации */
+.auth-input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--background-light);
+    color: var(--text-color-primary);
+    font-size: 1em;
+    font-family: 'Montserrat', sans-serif;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-input::placeholder {
+    color: #999;
+}
+
+.auth-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.2);
+}
+
+.auth-button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary-color);
+    color: #fff;
+    font-size: 1.05em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.auth-button:hover {
+    background: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.auth-switch-link {
+    display: block;
+    margin-top: 18px;
+    color: var(--text-color-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.auth-switch-link:hover {
+    color: var(--primary-color);
+}
+
+/* Стили для страницы профиля */
+.profile-info-container {
+    margin-top: 25px;
+    text-align: left;
+}
+
+.profile-info {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    background: var(--card-background);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-light);
+}
+
+.profile-info strong {
+    color: var(--primary-color);
+    margin-right: 10px;
+    font-weight: 700;
+}
+
+/* Стили для страницы "Скоро" (info grid general card) */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+    margin-top: 25px;
+    text-align: left;
+}
+
+.info-block {
+    background: var(--card-background);
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-light);
+    transition: transform 0.2s ease;
+}
+
+.info-block:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+.info-block h3 {
+    font-size: 1.4em;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.info-block p {
+    font-size: 1em;
+    line-height: 1.6;
+    color: var(--text-color-secondary);
+}
+
+/* Styles for forms related to absence tracking */
+.absence-form .form-group {
+    margin-bottom: 18px;
+    text-align: left;
+}
+
+.absence-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color-primary);
+}
+
+/* Styles for absence list */
+.absence-list {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.absence-entry {
+    background: var(--background-light);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease;
+}
+
+.absence-entry:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.absence-entry p {
+    margin: 5px 0;
+    color: var(--text-color-secondary);
+}
+
+.absence-entry strong {
+    color: var(--primary-color);
+}
+
+.entry-timestamp {
+    font-size: 0.85em;
+    color: #999;
+    text-align: right;
+    margin-top: 10px;
+}
+
+/* Styles for admin users table */
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: var(--card-background);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow-medium);
+}
+
+.users-table th,
+.users-table td {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+}
+
+.users-table th {
+    background: var(--primary-color);
+    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85em;
+}
+
+.users-table tr:last-child td {
+    border-bottom: none;
+}
+
+.users-table tbody tr:hover {
+    background-color: var(--background-light);
+}
+
+.role-select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--background-light);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9em;
+    color: var(--text-color-primary);
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.role-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+}
+
+.update-role-button {
+    background: var(--primary-color);
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-left: 10px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.update-role-button:hover {
+    background: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.small-button {
+    padding: 8px 12px;
+    font-size: 0.9em;
+    border-radius: 8px;
+    margin-left: 0;
+}
+
+.small-button:hover {
+    transform: none;
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление Пользователями - Администрация Селятино</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Decorative Circles -->
+    <div class="decorative-circle circle-1"></div>
+    <div class="decorative-circle circle-2"></div>
+    <div class="decorative-circle circle-3"></div>
+    <div class="decorative-circle circle-4"></div>
+    <div class="decorative-circle circle-5"></div>
+
+    <div class="container">
+        <nav class="navbar">
+            <div class="navbar-title">Панель Администратора</div>
+            <div>
+                <a href="/index" class="navbar-button">Главная</a>
+                <a href="/logout" class="navbar-button">Выйти</a>
+            </div>
+        </nav>
+
+        <div class="main-content">
+            <div class="content-card">
+                <h2 class="content-title">Список Пользователей</h2>
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Имя пользователя</th>
+                            <th>Роль</th>
+                            <th>Действия</th>
+                            {% if current_user_role == 'admin' %}
+                            <th>Изменить роль</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.role }}</td>
+                            <td>
+                                <a href="{{ url_for('admin_user_absences', user_id=user.id) }}" class="navbar-button small-button">Отсутствия</a>
+                            </td>
+                            {% if current_user_role == 'admin' %}
+                            <td>
+                                <select class="role-select" data-user-id="{{ user.id }}">
+                                    <option value="user" {% if user.role == 'user' %}selected{% endif %}>Пользователь</option>
+                                    <option value="moderator" {% if user.role == 'moderator' %}selected{% endif %}>Модератор</option>
+                                    <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Администратор</option>
+                                </select>
+                                <button class="update-role-button small-button" data-user-id="{{ user.id }}">Обновить</button>
+                            </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const updateRoleButtons = document.querySelectorAll('.update-role-button');
+            updateRoleButtons.forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    const userId = e.target.dataset.userId;
+                    const roleSelect = document.querySelector(`.role-select[data-user-id="${userId}"]`);
+                    const newRole = roleSelect.value;
+
+                    const response = await fetch('/admin/update_role', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ user_id: userId, new_role: newRole })
+                    });
+                    const data = await response.json();
+                    alert(data.message);
+                    if (response.ok) {
+                        location.reload(); // Reload to reflect changes
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

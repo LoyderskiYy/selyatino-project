@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Администрация посёлка Селятино</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Decorative Circles -->
+    <div class="decorative-circle circle-1"></div>
+    <div class="decorative-circle circle-2"></div>
+    <div class="decorative-circle circle-3"></div>
+    <div class="decorative-circle circle-4"></div>
+    <div class="decorative-circle circle-5"></div>
+
+    <div class="container">
+        <!-- Навигационная панель -->
+        <nav class="navbar">
+            <div class="navbar-title">Администрация Селятино</div>
+            <div>
+                {% if session.get('logged_in') %}
+                    {% if session.get('role') in ['admin', 'moderator'] %}
+                        <a href="/admin/users" class="navbar-button">Управление пользователями</a>
+                    {% endif %}
+                    <a href="/profile" class="navbar-button">Профиль</a>
+                    <a href="/logout" class="navbar-button">Выйти</a>
+                {% else %}
+                    <a href="/auth" class="navbar-button">Войти</a>
+                {% endif %}
+            </div>
+        </nav>
+        
+        <!-- Панель для кнопки "Soon" -->
+        <div class="sub-navbar">
+            <a href="/soon.html" class="navbar-button navbar-soon-button">Отметиться</a>
+        </div>
+
+        <!-- Шапка с изображением -->
+        <header class="header-section">
+            <div class="header-image" style="background-image: url('{{ url_for('static', filename='selyatino_main.jpg') }}');">
+                <div class="header-overlay">
+                    <h1 class="header-title">Добро пожаловать в Селятино</h1>
+                    <p class="header-subtitle">Официальный портал администрации</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Основной контент -->
+        <main class="main-content">
+            <div class="content-card">
+                <h2 class="content-title">Важная Информация</h2>
+                <p class="content-description">
+                    На этом портале вы найдете актуальные новости, объявления и полезные ресурсы, касающиеся жизни нашего посёлка. Мы стремимся сделать взаимодействие с администрацией максимально удобным и прозрачным.
+                </p>
+            </div>
+
+            <!-- Новая секция с карточками -->
+            <div class="info-grid">
+                <div class="info-block">
+                    <h3>Новости и События</h3>
+                    <p>Узнавайте первыми о всех мероприятиях, происходящих в Селятино. Будьте в курсе последних новостей и не пропускайте важные события.</p>
+                </div>
+                <div class="info-block">
+                    <h3>Государственные Услуги</h3>
+                    <p>Получайте доступ к государственным услугам онлайн. Информация о работе МФЦ, запись на прием и консультации со специалистами.</p>
+                </div>
+                <div class="info-block">
+                    <h3>Обратная Связь</h3>
+                    <p>Ваше мнение важно для нас. Оставляйте свои предложения и задавайте вопросы. Мы всегда готовы к диалогу с жителями.</p>
+                </div>
+            </div>
+        </main>
+        
+    </div>
+</body>
+</html>

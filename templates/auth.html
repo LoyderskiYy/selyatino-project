@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход/Регистрация - Администрация Селятино</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Decorative Circles -->
+    <div class="decorative-circle circle-1"></div>
+    <div class="decorative-circle circle-2"></div>
+    <div class="decorative-circle circle-3"></div>
+    <div class="decorative-circle circle-4"></div>
+    <div class="decorative-circle circle-5"></div>
+
+    <div class="container">
+        <!-- Навигационная панель -->
+        <nav class="navbar">
+            <div class="navbar-title">Практикум</div>
+        </nav>
+
+        <!-- Основной контент -->
+        <div class="main-content auth-main-content">
+            <div class="content-card auth-card">
+                <h2 class="content-title" id="auth-form-title">Вход</h2>
+                <form id="auth-form" style="margin-top: 20px;">
+                    <input type="text" id="username" name="username" placeholder="Имя пользователя" required class="auth-input">
+                    <input type="password" id="password" name="password" placeholder="Пароль" required class="auth-input">
+                    <button type="submit" id="submit-button" class="auth-button">Войти</button>
+                    <a href="#" id="switch-auth-mode" class="auth-switch-link">Нет аккаунта? Зарегистрироваться</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const authForm = document.getElementById('auth-form');
+        const authFormTitle = document.getElementById('auth-form-title');
+        const submitButton = document.getElementById('submit-button');
+        const switchAuthModeLink = document.getElementById('switch-auth-mode');
+        let isLoginMode = true; // true for login, false for register
+
+        switchAuthModeLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            isLoginMode = !isLoginMode;
+            if (isLoginMode) {
+                authFormTitle.textContent = 'Вход';
+                submitButton.textContent = 'Войти';
+                switchAuthModeLink.textContent = 'Нет аккаунта? Зарегистрироваться';
+            } else {
+                authFormTitle.textContent = 'Регистрация';
+                submitButton.textContent = 'Зарегистрироваться';
+                switchAuthModeLink.textContent = 'Уже есть аккаунт? Войти';
+            }
+        });
+
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const endpoint = isLoginMode ? '/login' : '/register';
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                const data = await response.json();
+                alert(data.message);
+                if (response.ok && !isLoginMode) { // Successfully registered, switch to login
+                    isLoginMode = true;
+                    authFormTitle.textContent = 'Вход';
+                    submitButton.textContent = 'Войти';
+                    switchAuthModeLink.textContent = 'Нет аккаунта? Зарегистрироваться';
+                }
+                // Redirect on successful login
+                if (response.ok && isLoginMode) {
+                    window.location.href = '/index';
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Произошла ошибка. Попробуйте снова.');
+            }
+        });
+    </script>
+</body>
+</html>

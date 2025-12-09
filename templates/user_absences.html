@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отсутствия Пользователя - Администрация Селятино</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Decorative Circles -->
+    <div class="decorative-circle circle-1"></div>
+    <div class="decorative-circle circle-2"></div>
+    <div class="decorative-circle circle-3"></div>
+    <div class="decorative-circle circle-4"></div>
+    <div class="decorative-circle circle-5"></div>
+
+    <div class="container">
+        <nav class="navbar">
+            <div class="navbar-title">Отсутствия Пользователя</div>
+            <div>
+                <a href="/admin/users" class="navbar-button">К списку пользователей</a>
+                <a href="/index" class="navbar-button">Главная</a>
+                <a href="/logout" class="navbar-button">Выйти</a>
+            </div>
+        </nav>
+
+        <div class="main-content">
+            <div class="content-card">
+                <h2 class="content-title">Отсутствия для пользователя: {{ user.username }}</h2>
+                {% if absences %}
+                <div class="absence-list">
+                    {% for absence in absences %}
+                    <div class="absence-entry">
+                        <p><strong>ФИО:</strong> {{ absence.fio }}</p>
+                        <p><strong>Дата начала:</strong> {{ absence.start_date }}</p>
+                        <p><strong>Дата окончания:</strong> {{ absence.end_date }}</p>
+                        <p><strong>Причина:</strong> {{ absence.reason }}</p>
+                        <p><strong>Тип:</strong> {{ absence.work_type }}</p>
+                        <p class="entry-timestamp">Записано: {{ absence.timestamp }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p style="color: #777;">У этого пользователя пока нет записей об отсутствии.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

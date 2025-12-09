@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отметка отсутствия - Администрация Селятино</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Decorative Circles -->
+    <div class="decorative-circle circle-1"></div>
+    <div class="decorative-circle circle-2"></div>
+    <div class="decorative-circle circle-3"></div>
+    <div class="decorative-circle circle-4"></div>
+    <div class="decorative-circle circle-5"></div>
+
+    <div class="container">
+        <!-- Навигационная панель -->
+        <nav class="navbar">
+            <div class="navbar-title">Практикум</div>
+            <div>
+                <a href="/index" class="navbar-button">Главная</a>
+            </div>
+        </nav>
+
+        <!-- Основной контент -->
+        <div class="main-content">
+            <div class="content-card">
+                <h2 class="content-title">Отметить Отсутствие / Тип Работы</h2>
+                <form id="absenceForm" class="absence-form">
+                    <div class="form-group">
+                        <label for="fio">ФИО:</label>
+                        <input type="text" id="fio" class="auth-input" placeholder="Введите ваше ФИО" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="startDate">Дата начала отсутствия:</label>
+                        <input type="date" id="startDate" class="auth-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate">Дата окончания отсутствия:</label>
+                        <input type="date" id="endDate" class="auth-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="reason">Причина отсутствия (если применимо):</label>
+                        <input type="text" id="reason" class="auth-input" placeholder="Отпуск, больничный, другое...">
+                    </div>
+                    <div class="form-group">
+                        <label for="workType">Тип работы/отсутствия:</label>
+                        <select id="workType" class="auth-input" required>
+                            <option value="">Выберите тип</option>
+                            <option value="office">В офисе</option>
+                            <option value="remote">Удаленно</option>
+                            <option value="leave">Отпуск</option>
+                            <option value="sick-leave">Больничный</option>
+                            <option value="other">Другое</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="auth-button">Сохранить</button>
+                </form>
+
+                <h3 class="content-title" style="margin-top: 40px;">Текущие Отметки</h3>
+                <div id="currentAbsences" class="absence-list">
+                    <!-- Записи об отсутствии будут здесь -->
+                    <p style="color: #777;">Пока нет записей.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const absenceForm = document.getElementById('absenceForm');
+            const currentAbsencesDiv = document.getElementById('currentAbsences');
+
+            // Загрузка данных об отсутствии с сервера
+            async function loadAbsences() {
+                const response = await fetch('/get_absences');
+                if (response.ok) {
+                    const absences = await response.json();
+                    currentAbsencesDiv.innerHTML = ''; // Очищаем предыдущие записи
+                    if (absences.length > 0) {
+                        absences.forEach(renderAbsence);
+                    } else {
+                        currentAbsencesDiv.innerHTML = '<p style="color: #777;">Пока нет записей.</p>';
+                    }
+                } else {
+                    currentAbsencesDiv.innerHTML = '<p style="color: #777;">Не удалось загрузить записи об отсутствии.</p>';
+                }
+            }
+
+            // Отправка данных формы на сервер
+            absenceForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const fio = document.getElementById('fio').value;
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+                const reason = document.getElementById('reason').value;
+                const workType = document.getElementById('workType').value;
+                const timestamp = new Date().toLocaleString('ru-RU');
+
+                if (!fio || !startDate || !workType) {
+                    alert('Пожалуйста, заполните обязательные поля: ФИО, Дата начала и Тип работы/отсутствия.');
+                    return;
+                }
+
+                const absenceEntry = {
+                    fio: fio,
+                    start_date: startDate,
+                    end_date: endDate || 'Не указано',
+                    reason: reason || 'Не указано',
+                    work_type: workType,
+                    timestamp: timestamp
+                };
+
+                const response = await fetch('/submit_absence', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(absenceEntry)
+                });
+
+                const data = await response.json();
+                alert(data.message);
+
+                if (response.ok) {
+                    absenceForm.reset();
+                    loadAbsences(); // Перезагрузить записи после успешной отправки
+                }
+            });
+
+            function renderAbsence(entry) {
+                const entryDiv = document.createElement('div');
+                entryDiv.classList.add('absence-entry');
+                entryDiv.innerHTML = `
+                    <p><strong>ФИО:</strong> ${entry.fio || 'Не указано'}</p>
+                    <p><strong>Дата начала:</strong> ${entry.start_date || 'Не указано'}</p>
+                    <p><strong>Дата окончания:</strong> ${entry.end_date || 'Не указано'}</p>
+                    <p><strong>Причина:</strong> ${entry.reason || 'Не указано'}</p>
+                    <p><strong>Тип:</strong> ${entry.work_type || 'Не указано'}</p>
+                    <p class="entry-timestamp">Записано: ${entry.timestamp || 'Не указано'}</p>
+                `;
+                currentAbsencesDiv.prepend(entryDiv); // Добавляем новые записи сверху
+            }
+
+            loadAbsences(); // Вызываем загрузку при инициализации страницы
+        });
+    </script>
+</body>
+</html>
